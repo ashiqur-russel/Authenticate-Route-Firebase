@@ -2,15 +2,10 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../contexts/UserContext";
-import { getAuth, sendEmailVerification, signInWithPopup } from "firebase/auth";
-import { GoogleAuthProvider } from "firebase/auth";
-
-import app from "../firebase/firebase.config";
-const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
 
 const Register = () => {
-  const { createUser, updateUserProfile } = useContext(AuthContext);
+  const { createUser, updateUserProfileName, verifyEmail, googleSignIn } =
+    useContext(AuthContext);
   //Handle Submit form
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,15 +14,12 @@ const Register = () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    console.log(name, email, password);
-
+    //create user function
     createUser(email, password)
       .then((res) => {
-        const user = res.user;
-        console.log(user);
-        updateUserProfile(name).then(() => {
-          toast.success("Name Updated: ");
-          sendEmailVerification(auth.currentUser)
+        toast.success("User Created");
+        updateUserProfileName(name).then(() => {
+          verifyEmail()
             .then(() => {
               toast.success("verify your email");
             })
@@ -42,9 +34,7 @@ const Register = () => {
   };
   //Handle Google Aign in
   const handleGoogleSubmit = () => {
-    console.log("clicked");
-
-    signInWithPopup(auth, googleProvider)
+    googleSignIn()
       .then((result) => {
         const user = result.user;
         console.log(user);
@@ -53,6 +43,7 @@ const Register = () => {
         console.error(err);
       });
   };
+
   return (
     <div className="flex justify-center items-center pt-8">
       <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900">
