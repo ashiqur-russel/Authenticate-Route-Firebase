@@ -7,6 +7,7 @@ import {
   sendEmailVerification,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
   updateProfile,
 } from "firebase/auth";
 
@@ -49,12 +50,20 @@ const UserContext = ({ children }) => {
     return signInWithPopup(auth, googleProvider);
   };
 
+  //logout
+
+  const logOut = () => {
+    setLoading(true);
+    return signOut(auth);
+  };
+
   useEffect(() => {
     const unsbscribe = onAuthStateChanged(auth, (currentUser) => {
       setuser(currentUser);
     });
     return () => {
       unsbscribe();
+      setLoading(false);
     };
   }, []);
 
@@ -65,6 +74,7 @@ const UserContext = ({ children }) => {
     updateUserProfileName,
     verifyEmail,
     googleSignIn,
+    logOut,
   };
   return (
     <AuthContext.Provider value={userInfo}>{children}</AuthContext.Provider>
