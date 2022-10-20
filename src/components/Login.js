@@ -27,6 +27,8 @@ const Login = () => {
     signIn(email, password)
       .then((res) => {
         const user = res.user;
+        navigate("/profile");
+
         console.log("Loggin in: ", user);
       })
       .catch((err) => {

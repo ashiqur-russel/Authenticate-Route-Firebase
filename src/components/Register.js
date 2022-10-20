@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../contexts/UserContext";
 
 const Register = () => {
   const { createUser, updateUserProfileName, verifyEmail, googleSignIn } =
     useContext(AuthContext);
+
+  const navigate = useNavigate();
   //Handle Submit form
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -36,6 +38,8 @@ const Register = () => {
   const handleGoogleSubmit = () => {
     googleSignIn()
       .then((result) => {
+        navigate("/profile");
+
         const user = result.user;
         console.log(user);
       })
